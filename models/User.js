@@ -12,7 +12,7 @@ class User {
         this._email = email;
         this._password = password;
         this._photo = photo;
-        this._register = new Date ();
+        this._register = new Date();
 
     }
 

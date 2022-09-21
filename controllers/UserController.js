@@ -100,8 +100,15 @@ class UserController {
     getValues() {
 
         let user = {};
+        let isValid = true;
 
         [...this.formEl.elements].forEach(function (field, index) {
+
+            if (['name', 'email', 'password'].indexOf(field.name) >-1 && !field.value){
+                field.parentElement.classList.add('has-error');
+                isValid = false;
+
+            }
 
             // == é comparação, === compara valor e tipo de dado
             if (field.name == "gender") {
@@ -119,7 +126,10 @@ class UserController {
             }
 
         });
-
+ 
+        if (!isValid){
+            return false;
+        }
 
         // Utilizando POO
         return new User(
@@ -147,7 +157,7 @@ class UserController {
             <td>${dataUser.name}</td>
             <td>${dataUser.email}</td>
             <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
-            <td>${dataUser.register}</td>
+            <td>${Utils.dateFormat(dataUser.register)}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
