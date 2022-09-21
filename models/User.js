@@ -3,7 +3,7 @@
 
 class User {
 
-    constructor(name, gender, birth, country, email, password, photo, admin){
+    constructor(name, gender, birth, country, email, password, photo, admin) {
 
         this._name = name;
         this._gender = gender;
@@ -12,47 +12,48 @@ class User {
         this._email = email;
         this._password = password;
         this._photo = photo;
+        this._admin = admin;
         this._register = new Date();
 
     }
 
-    get _register(){
+    get _register() {
         return this._register;
     }
 
-    get name(){
+    get name() {
         return this._name;
     }
 
-    get gender(){
+    get gender() {
         return this._gender;
     }
 
-    get birth(){
+    get birth() {
         return this._birth;
     }
 
-    get country(){
+    get country() {
         return this._country;
-      }
+    }
 
-    get email(){
+    get email() {
         return this._email;
     }
 
-    get photo(){
+    get photo() {
         return this._photo;
     }
 
-    get password(){
+    get password() {
         return this._password;
     }
 
-    get admin(){
+    get admin() {
         return this._admin;
     }
 
-    set photo(value){
+    set photo(value) {
         this._photo = value;
 
     }
