@@ -53,24 +53,12 @@ class UserController {
                         result._photo = content;
                     }
 
-                    tr.dataset.user = JSON.stringify(values);
+                    let user = new User();
 
-                    tr.innerHTML = ` 
+                    user.loadFromJSON(result);
+
+                    this.getTr(user,tr);
         
-                    <td><img src="${values.photo}" alt="User Image" class="img-circle img-sm"></td>
-                    <td>${result._name}</td>
-                    <td>${result._email}</td>
-                    <td>${(result._admin) ? 'Sim' : 'Não'}</td>
-                    <td>${result.dateFormat(result._register)}</td>
-                     <td>
-                        <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                        <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                     </td>
-            
-                ` ;
-
-                    this.addEventsTr(tr);
-
                     this.updateCount();
 
                     this.formIdUpdateEl.reset();
@@ -267,29 +255,36 @@ class UserController {
     // Html e Jascript trabalhando junto com o formulario
     addLine(dataUser) {
 
-        let tr = document.createElement('tr');
+        let tr = this.getTr(dataUser);
+
+        this.tableEl.appendChild(tr);
+
+        this.updateCount();
+
+    }
+
+    getTr(dataUser, tr = null){
+
+        if(tr === null) tr = document.createElement('tr');
 
         tr.dataset.user = JSON.stringify(dataUser);
 
         tr.innerHTML = ` 
         
-            <td><img src="${dataUser.photo}dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
-            <td>${dataUser.name}</td>
-            <td>${dataUser.email}</td>
-            <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
+         <td><img src="${dataUser.photo}dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
+         <td>${dataUser.name}</td>
+         <td>${dataUser.email}</td>
+         <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
             <td>${Utils.dateFormat(dataUser.register)}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
-                <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
+                <button type="button" class="btn btn-danger btn-delete btn-xs btn-flat">Excluir</button>
             </td>
-        
-        ` ;
+    
+         ` ;
 
         this.addEventsTr(tr);
-
-        this.tableEl.appendChild(tr);
-
-        this.updateCount();
+        return tr;
 
     }
 
@@ -379,7 +374,7 @@ class UserController {
 
         });
 
-        console.log(numberUsers);
+        
 
         document.querySelector("#number-users").innerHTML = numberUsers;
         document.querySelector("#number-users-admin").innerHTML = numberAdmin;
