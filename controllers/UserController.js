@@ -14,11 +14,12 @@ class UserController {
 
         this.onSubmit();
         this.oneEdit();
+        this.selectAll();
     }
 
     oneEdit() {
 
-        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e => {
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e=> {
             this.showPanelCreate();
 
         });
@@ -90,7 +91,7 @@ class UserController {
     //  arrow functions é uma forma mais simplificada para trabalhar com função =>
 
     //Utilizando eventos
-    onSubmit() {
+    onSubmit(){
 
         this.formEl.addEventListener("submit", event => {
 
@@ -104,10 +105,12 @@ class UserController {
 
             if (!values) return false;
 
-            this.getPhoto(formEl).then(
+            this.getPhoto(this.formEl).then(
                 (content) => {
 
-                    values.photo = "content";
+                    values.photo = content;
+
+                    this.insert(dataUser);
 
                     this.addLine(values);
 
@@ -132,7 +135,7 @@ class UserController {
         return new Promise((resolve, reject) => {
             let fileReader = new FileReader();
 
-            let elements = [...this.formEl.elements].filter(item => {
+            let elements = [...formEl.elements].filter(item => {
 
                 if (item.name === 'photo') {
                     return item;
@@ -142,10 +145,10 @@ class UserController {
 
             let file = elements[0].files[0];
 
+             // processamento independente(promisse), por isso são assincronos
             fileReader.onload = () => {
 
-                // processamento independente(promisse), por isso são assincronos
-                resolve(fileReader.result);
+             resolve(fileReader.result);
 
             };
 
@@ -219,6 +222,48 @@ class UserController {
 
     }
 
+    getUsersStorage(){
+
+        let users = [];
+
+        if(localStorage.getItem("users")){
+            users = JSON.parse(sessionStorage.getItem("users"));
+        }
+
+        return users;
+
+    }
+
+
+    selectAll(){
+        let users = this.getUsersStorage();
+
+        users.forEach(dataUser=>{
+
+            let user= new User();
+
+            user.loadFromJSON(dataUser);
+
+
+            this.addLine(user);
+
+        });
+       
+
+    }
+
+    // Utilizando metodo sessionStorage
+    insert(data){
+        let users = this.getUsersStorage();
+
+        users.push(data);
+
+        // sessionStorage.setItem("users",JSON.stringify(users));
+        localStorage.setItem("users",JSON.stringify(users));
+
+    }
+
+    // appendChild permite adcionar código html como elemento filho do elemento atual
     // Html e Jascript trabalhando junto com o formulario
     addLine(dataUser) {
 
@@ -242,7 +287,6 @@ class UserController {
 
         this.addEventsTr(tr);
 
-        // appendChild permite adcionar código html como elemento filho do elemento atual
         this.tableEl.appendChild(tr);
 
         this.updateCount();
