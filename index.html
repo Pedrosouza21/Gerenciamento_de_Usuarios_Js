@@ -153,17 +153,7 @@
                   </thead>
                   <tbody id="table-users">
 
-                    <tr>
-                      <td><img src="dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
-                      <td>Fulano</td>
-                      <td>fulano@hcode.com.br</td>
-                      <td>Sim</td>
-                      <td>02/04/2018</td>
-                      <td>
-                        <button type="button" class="btn btn-primary btn-xs btn-flat">Editar</button>
-                        <button type="button" class="btn btn-danger btn-xs btn-flat">Excluir</button>
-                      </td>
-                    </tr>
+                   
 
                   </tbody>
                 </table>
@@ -181,7 +171,7 @@
                 <!-- small box -->
                 <div class="small-box bg-green">
                   <div class="inner">
-                    <h3 id="number=users" >0</h3>
+                    <h3 id="number-users" >0</h3>
 
                     <p>Usuários</p>
                   </div>
@@ -218,14 +208,14 @@
                   <div class="form-group">
                     <label for="exampleInputName">Nome</label>
                     <input type="text"required class="form-control" id="exampleInputName" placeholder="Digite o nome do usuário"
-                      name="name" value="Hcode">
+                      name="name" >
                   </div>
                   <div class="form-group">
                     <label>Gênero</label>
                     <div class="radio">
                       <label for="exampleInputGenderM">
-                        <input type="radio" id="exampleInputGenderM" name="gender" value="M">
-                        Masculino</label>
+                        <input type="radio" id="exampleInputGenderM" name="gender" value="M" checked>
+                        Masculino </label>
                     </div>
                     <div class="radio">
                       <label for="exampleInputGenderF">
@@ -240,7 +230,7 @@
                   <div class="form-group">
                     <label for="exampleInputCountry">País</label>
                     <select class="form-control" id="exampleInputCountry" name="country">
-                      <option value="selected" selected>Selecione um país</option>
+                      <option value="" selected="selected">Selecione um país</option>
                       <option value="United States">United States</option>
                       <option value="United Kingdom">United Kingdom</option>
                       <option value="Afghanistan">Afghanistan</option>
@@ -526,13 +516,13 @@
                   <div class="form-group">
                     <label for="exampleInputName">Nome</label>
                     <input type="text"required class="form-control" id="exampleInputName" placeholder="Digite o nome do usuário"
-                      name="name" value="Hcode">
+                      name="name">
                   </div>
                   <div class="form-group">
                     <label>Gênero</label>
                     <div class="radio">
                       <label for="exampleInputGenderM">
-                        <input type="radio" id="exampleInputGenderM" name="gender" value="M">
+                        <input type="radio" id="exampleInputGenderM" name="gender" value="M" checked>
                         Masculino</label>
                     </div>
                     <div class="radio">
@@ -548,7 +538,7 @@
                   <div class="form-group">
                     <label for="exampleInputCountry">País</label>
                     <select class="form-control" id="exampleInputCountry" name="country">
-                      <option value="selected" selected>Selecione um país</option>
+                      <option value=""selected="selected">Selecione um país</option>
                       <option value="United States">United States</option>
                       <option value="United Kingdom">United Kingdom</option>
                       <option value="Afghanistan">Afghanistan</option>

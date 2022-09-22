@@ -55,7 +55,9 @@ class UserController {
 
                     let user = new User();
 
-                    user.loadFromJSON(result);
+                    user.loadFromJSON(result)
+
+                    user.save();
 
                     this.getTr(user,tr);
         
@@ -98,7 +100,7 @@ class UserController {
 
                     values.photo = content;
 
-                    this.insert(dataUser);
+                    values.save();
 
                     this.addLine(values);
 
@@ -240,16 +242,6 @@ class UserController {
 
     }
 
-    // Utilizando metodo sessionStorage
-    insert(data){
-        let users = this.getUsersStorage();
-
-        users.push(data);
-
-        // sessionStorage.setItem("users",JSON.stringify(users));
-        localStorage.setItem("users",JSON.stringify(users));
-
-    }
 
     // appendChild permite adcionar código html como elemento filho do elemento atual
     // Html e Jascript trabalhando junto com o formulario
@@ -375,7 +367,6 @@ class UserController {
         });
 
         
-
         document.querySelector("#number-users").innerHTML = numberUsers;
         document.querySelector("#number-users-admin").innerHTML = numberAdmin;
     }
