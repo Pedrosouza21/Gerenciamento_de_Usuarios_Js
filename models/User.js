@@ -96,6 +96,7 @@ class User {
 
     }
 
+//  editando Local localStorage
     save(){
 
         let users = User.getUsersStorage();
