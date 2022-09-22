@@ -107,7 +107,7 @@ class User {
 
                 if(u._id == this.id){
 
-                    u = this;
+                Object.assign(u,this);
                 }
 
                 return u;
