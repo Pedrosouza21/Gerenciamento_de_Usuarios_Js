@@ -3,13 +3,12 @@
 // view é a interface que o usuário utiliza
 // controller liga o model e view
 
-
 class UserController {
 
     constructor(formIdCreate, formIdUpdate, tableId) {
 
         this.formEl = document.getElementById(formIdCreate);
-        this.formIdUpdateEl = document.getElementById(formIdUpdate);
+        this.formUpdateEl = document.getElementById(formIdUpdate);
         this.tableEl = document.getElementById(tableId);
 
         this.onSubmit();
@@ -19,12 +18,13 @@ class UserController {
 
     oneEdit() {
 
-        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e=> {
+        document.querySelector("#box-user-update .btn-cancel").addEventListener("click", e => {
+
             this.showPanelCreate();
 
         });
 
-        this.formIdUpdateEl.addEventListener("submit", event => {
+        this.formUpdateEl.addEventListener("submit", event => {
 
             event.preventDefault();
 
@@ -32,7 +32,7 @@ class UserController {
 
             btn.disabled = true;
 
-            let values = this.getValues(this.formIdUpdateEl);
+            let values = this.getValues(this.formUpdateEl);
 
             let index = this.formUpdateEl.dataset.trIndex;
 
@@ -42,9 +42,7 @@ class UserController {
 
             let result = Object.assign({}, userOld, values);
 
-
-
-            this.getPhoto(this.formIdUpdateEl).then(
+            this.getPhoto(this.formUpdateEl).then(
                 (content) => {
 
                     if (!values.photo) {
@@ -55,19 +53,20 @@ class UserController {
 
                     let user = new User();
 
-                    user.loadFromJSON(result)
+                    user.loadFromJSON(result);
 
                     user.save();
 
-                    this.getTr(user,tr);
-        
+                    this.getTr(user, tr);
+
                     this.updateCount();
 
-                    this.formIdUpdateEl.reset();
+                    this.formUpdateEl.reset();
 
                     btn.disabled = false;
 
                     this.showPanelCreate();
+
                 },
                 (e) => {
                     console.error(e);
@@ -75,13 +74,14 @@ class UserController {
             );
 
         });
+
     }
 
 
     //  arrow functions é uma forma mais simplificada para trabalhar com função =>
 
     //Utilizando eventos
-    onSubmit(){
+    onSubmit() {
 
         this.formEl.addEventListener("submit", event => {
 
@@ -107,6 +107,7 @@ class UserController {
                     this.formEl.reset();
 
                     btn.disabled = false;
+
                 },
                 (e) => {
                     console.error(e);
@@ -114,6 +115,7 @@ class UserController {
             );
 
         });
+
     }
 
     // callback função de retorno
@@ -135,10 +137,10 @@ class UserController {
 
             let file = elements[0].files[0];
 
-             // processamento independente(promisse), por isso são assincronos
+            // processamento independente(promisse), por isso são assincronos
             fileReader.onload = () => {
 
-             resolve(fileReader.result);
+                resolve(fileReader.result);
 
             };
 
@@ -197,7 +199,7 @@ class UserController {
             return false;
         }
 
-        // Utilizando POO
+        // Utilizando POO user
         return new User(
             user.name,
             user.gender,
@@ -212,34 +214,20 @@ class UserController {
 
     }
 
-    getUsersStorage(){
 
-        let users = [];
+    selectAll() {
 
-        if(localStorage.getItem("users")){
-            users = JSON.parse(sessionStorage.getItem("users"));
-        }
+        let users = User.getUsersStorage();
 
-        return users;
+        users.forEach(dataUser => {
 
-    }
-
-
-    selectAll(){
-        let users = this.getUsersStorage();
-
-        users.forEach(dataUser=>{
-
-            let user= new User();
+            let user = new User();
 
             user.loadFromJSON(dataUser);
-
 
             this.addLine(user);
 
         });
-       
-
     }
 
 
@@ -255,56 +243,59 @@ class UserController {
 
     }
 
-    getTr(dataUser, tr = null){
+    getTr(dataUser, tr = null) {
 
-        if(tr === null) tr = document.createElement('tr');
+        if (tr === null) tr = document.createElement('tr');
 
         tr.dataset.user = JSON.stringify(dataUser);
 
-        tr.innerHTML = ` 
-        
-         <td><img src="${dataUser.photo}dist/img/user1-128x128.jpg" alt="User Image" class="img-circle img-sm"></td>
-         <td>${dataUser.name}</td>
-         <td>${dataUser.email}</td>
-         <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
+        tr.innerHTML = `
+            <td><img src="${dataUser.photo}" alt="User Image" class="img-circle img-sm"></td>
+            <td>${dataUser.name}</td>
+            <td>${dataUser.email}</td>
+            <td>${(dataUser.admin) ? 'Sim' : 'Não'}</td>
             <td>${Utils.dateFormat(dataUser.register)}</td>
             <td>
                 <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
                 <button type="button" class="btn btn-danger btn-delete btn-xs btn-flat">Excluir</button>
             </td>
-    
-         ` ;
+        `;
 
         this.addEventsTr(tr);
+
         return tr;
 
     }
 
     addEventsTr(tr) {
 
-        // replace procura o primeiro elemento e substitui 
+        tr.querySelector(".btn-delete").addEventListener("click", e => {
 
-        tr.querySelector("btn-delete").addEventListener("click", e => {
-            if(comfirm("Deseja realmente excluir?")){
+            if (confirm("Deseja realmente excluir?")) {
+
+                let user = new User();
+
+                user.loadFromJSON(JSON.parse(tr.dataset.user));
+
+                user.remove();
 
                 tr.remove();
 
                 this.updateCount();
+
             }
 
         });
 
-
-        tr.querySelector("btn-edit").addEventListener("click", e => {
+        tr.querySelector(".btn-edit").addEventListener("click", e => {
 
             let json = JSON.parse(tr.dataset.user);
 
-
-            this.formIdUpdateEl.dataset.trIndex = tr.sectionRowIndex;
+            this.formUpdateEl.dataset.trIndex = tr.sectionRowIndex;
 
             for (let name in json) {
 
-                let field = this.formIdUpdateEl.querySelector("[name=" + name.replace("_", "") + "]");
+                let field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "]");
 
                 if (field) {
 
@@ -314,7 +305,7 @@ class UserController {
                             break;
 
                         case 'radio':
-                            let field = this.formIdUpdateEl.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
+                            field = this.formUpdateEl.querySelector("[name=" + name.replace("_", "") + "][value=" + json[name] + "]");
                             field.checked = true;
                             break;
 
@@ -327,11 +318,11 @@ class UserController {
 
                     }
 
-
                 }
+
             }
 
-            this.formIdUpdateEl.querySelector(".photo").src = json._photo;
+            this.formUpdateEl.querySelector(".photo").src = json._photo;
 
             this.showPanelUpdate();
 
@@ -366,7 +357,7 @@ class UserController {
 
         });
 
-        
+
         document.querySelector("#number-users").innerHTML = numberUsers;
         document.querySelector("#number-users-admin").innerHTML = numberAdmin;
     }
